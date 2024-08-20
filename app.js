@@ -18,7 +18,7 @@ config();
 
 app.use(
   cors({
-    origin: "https://intern-hub-frontend.vercel.app"    ,
+    origin: true,
     method: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
