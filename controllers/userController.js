@@ -44,17 +44,27 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
-  res
-    .status(201)
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
-    .json({
-      success: true,
-      message: "Logged Out Successfully.",
-    });
+  // Clear the token cookie to log the user out
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+
+  // Check if a redirect URL is provided in the query parameters
+  const redirectUrl = req.query.redirect;
+
+  if (redirectUrl) {
+    // Redirect the user to the specified URL after logout
+    return res.redirect(redirectUrl);
+  }
+
+  // Default response if no redirect URL is provided
+  res.status(201).json({
+    success: true,
+    message: "Logged Out Successfully.",
+  });
 });
+
 
 
 export const getUser = catchAsyncErrors((req, res, next) => {
